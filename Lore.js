@@ -1,5 +1,5 @@
 var express = require('express');
-
+const { session_key, sendgrid_key } = require('./config');
 var app = express();
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 var bodyParser = require('body-parser');
@@ -7,12 +7,17 @@ var flash = require('express-flash');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var validator = require('express-validator');
+
 var nodemailer = require('nodemailer');
-  var sgMail = require('@sendgrid/mail');
-  var path = require('path');
+var sgMail = require('@sendgrid/mail');
+var path = require('path');
+
+const {sendgrip_key, }
+
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(session({secret:'SuperSecretPassword'}));
+app.use(session({secret: session_key}));
   app.use(flash());
 
 
@@ -42,7 +47,7 @@ app.get('/ContactUs',function(req,res){
 
 app.post('/ContactUs', function(req, res){
 
-  sgMail.setApiKey("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");
+  sgMail.setApiKey(sendgrid_key);
   var msg = {
     to: req.body.ContactEmail,
     from: 'ThomasLittle@TLBowls.com',
@@ -97,5 +102,6 @@ app.use(function(err, req, res, next){
 });
 
 app.listen(app.get('port'), function(){
+
   console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
 });
